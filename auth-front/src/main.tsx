@@ -7,8 +7,14 @@ import Login from './routes/Login.tsx'
 import Signup from './routes/signup.tsx'
 import Directory from './routes/Directory.tsx'
 import Protect from './routes/Protect.tsx'
+import Authenti from './auth/Authenti.tsx'
 
 const router = createBrowserRouter([
+
+    {
+        path: "*",
+        element: <Login />,
+    },
     {
         path: "/",
         element: <Login />,
@@ -30,6 +36,8 @@ const router = createBrowserRouter([
 ]);
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <RouterProvider router ={router} />
+      <Authenti>
+          <RouterProvider router ={router} />
+      </Authenti>
   </React.StrictMode>,
 )

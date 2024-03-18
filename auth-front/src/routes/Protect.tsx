@@ -1,9 +1,11 @@
 import {Outlet, Navigate} from "react-router-dom";
 import {useState} from "react";
+import {useAuth} from "../auth/Authenti";
+
 export default function Protect() {
-    const [isAuth, setIsAuth] = useState(false);
+    const auth = useAuth();
 
     //if isAuth = True continue else login redirect
-    return isAuth ? <Outlet /> : <Navigate to = "/" />;
+    return auth.isAuthenticated ? <Outlet /> : <Navigate to = "/" />;
 }
 
