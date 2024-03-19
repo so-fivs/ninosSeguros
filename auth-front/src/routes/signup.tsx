@@ -11,14 +11,11 @@ export default function Signup() {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [errorResponse, setErrorResponse] = useState("");
+
     const auth = useAuth();
     const goTo = useNavigate();
 
-    if( auth.isAuthenticated ){
-        return <Navigate to = "/directory"/>;
-    }
-
-    async function handleSubmit( e : React.FormEvent<HTMLFormElement> ){
+    async function handleSubmit( e: React.FormEvent<HTMLFormElement> ){
         e.preventDefault();
         try{
             const response = await fetch( `${API_URL}/signup`, {
@@ -47,6 +44,9 @@ export default function Signup() {
         }catch (error) {
             console.log(error);
         }
+    }
+    if( auth.isAuthenticated ){
+        return <Navigate to = "/directory"/>;
     }
     return (
         <Default>

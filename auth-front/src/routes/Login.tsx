@@ -3,7 +3,7 @@ import { Navigate, useNavigate } from "react-router-dom";
 import { useAuth } from "../auth/Authenti";
 import { useState } from "react";
 import { API_URL } from "../auth/constants";
-import { AuthResponseError, AuthResponse } from "../types/types";
+import { AuthResponseError } from "../types/types";
 
 export default function Login() {
 
@@ -11,10 +11,6 @@ export default function Login() {
     const [password, setPassword] = useState("");  const [errorResponse, setErrorResponse] = useState("");
     const auth = useAuth();
     const goTo = useNavigate();
-
-    if( auth.isAuthenticated ){
-        return <Navigate to = "/directory"/>;
-    }
 
     async function handleSubmit( e : React.FormEvent<HTMLFormElement> ){
         e.preventDefault();
@@ -45,6 +41,11 @@ export default function Login() {
             console.log(error);
         }
     }
+
+    if( auth.isAuthenticated ){
+        return <Navigate to = "/directory"/>;
+    }
+
     return (
         <Default>
             <form className="form" onSubmit={handleSubmit}>
