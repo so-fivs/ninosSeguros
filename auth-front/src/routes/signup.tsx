@@ -1,15 +1,18 @@
 import Default from "../templates/default";
-import { Navigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import { useAuth } from "../auth/Authenti";
 import { useState } from "react";
 import { API_URL } from "../auth/constants";
+import { AuthResponseError } from "../types/types";
 
 export default function Signup() {
 
     const [name, setName]     = useState("");
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+    const [errorResponse, setErrorResponse] = useState("");
     const auth = useAuth();
+    const goTo = useNavigate();
 
     if( auth.isAuthenticated ){
         return <Navigate to = "/directory"/>;
@@ -32,8 +35,13 @@ export default function Signup() {
 
             if (response.ok){
                 console.log("Usuario creado OK");
+                setErrorResponse("");
+                goTo("/");
             }else{
                 console.log("Algo ocurrio");
+                const json = (await response.json()) as AuthResponseError;
+                setErrorResponse(json.body.error);
+                return;
             }
 
         }catch (error) {
@@ -44,6 +52,7 @@ export default function Signup() {
         <Default>
             <form className="form" onSubmit={handleSubmit}>
                 <h1>Signup</h1>
+                {!!errorResponse && <div className="errorMessage">{errorResponse}</div>}
                 <label>Nombre:</label>
                 <input type="text"
                        value={name}
