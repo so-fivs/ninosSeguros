@@ -5,7 +5,9 @@ const { jsonResponse } = require("../lib/jsonResponse");
 const {validateRefreshTokens } = require("../auth/validateTokens");
 
 router.post("/", async (req,res) => {
+    console.log()
     const refreshToken = getTokenHeader(req.headers);
+
     if (refreshToken){
         try{
             const found = await Token.findOne({ token:refreshToken });
