@@ -19,3 +19,11 @@ export interface User {
         username: string,
     };
 }
+
+export interface AccessTokenResponse{
+    statusCode: number;
+    body:{
+        accessToken : string,
+    };
+    error?: string;
+}
