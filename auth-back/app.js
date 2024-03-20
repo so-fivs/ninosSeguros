@@ -23,7 +23,7 @@ app.use("/api/login", require("./routes/login"));
 app.use("/api/user", authenticate, require("./routes/user"));
 app.use("/api/signout", require("./routes/signout"));
 app.use("/api/todos", authenticate, require("./routes/todos"));
-app.use("/api/refreshToken", require("./routes/refreshToken"));
+app.use("/api/refreshtoken", require("./routes/refreshToken"));
 
 app.get("/", (req,res) => {
    res.send("Mensaje");

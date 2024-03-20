@@ -1,6 +1,6 @@
-exports.jsonResponse = function(statusCode, body){
-    return{
-        statusCode,
-        body,
+exports.jsonResponse = function (statuscode, body) {
+    return {
+        statuscode,
+        body: body,
     };
 };

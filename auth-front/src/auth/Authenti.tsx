@@ -24,22 +24,20 @@ export default function Authenti({children}:AuthProps) {
 
     async function requestNewAccessToken(refreshToken:string){
         try{
-            const response = await fetch( `${API_URL}/refreshToken`, {
+            const response = await fetch( `${API_URL}/refreshtoken`, {
                 method: "POST",
                 //https://dev.to/oneadvanced/different-types-of-security-token-4on#:~:text=Access%20tokens%20are%20used%20in,which%20must%20be%20a%20JWT.
                 headers: {
                     "Content-Type": "application/json",
-                    "Authorization": `Bearer ${refreshToken}`,
+                     Authorization: `Bearer ${refreshToken}`,
                 },
             });
-
             if (response.ok){
                 const json = (await response.json()) as AccessTokenResponse;
-
                 if(json.error){
                     throw new Error(json.error);
                 }
-                return json.body.accessToken;
+                return json.accessToken;
             }else{
                 throw new Error(response.statusText);
             }
@@ -58,7 +56,7 @@ export default function Authenti({children}:AuthProps) {
                 //https://dev.to/oneadvanced/different-types-of-security-token-4on#:~:text=Access%20tokens%20are%20used%20in,which%20must%20be%20a%20JWT.
                 headers: {
                     "Content-Type": "application/json",
-                    "Authorization": `Bearer ${accessToken}`,
+                     Authorization: `Bearer ${accessToken}`,
                 },
             });
 

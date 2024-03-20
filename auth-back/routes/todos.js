@@ -3,14 +3,14 @@ const Todo = require("../shema/todo");
 
 router.get("/", async (req,res) => {
     try{
-        const todos = Todo.find({idUser: req.user.id})
+        const todos = await Todo.find({idUser: req.user.id})
         if (todos){
             res.json(todos);
         }else{
             return res.status(404).json({error : "No se encuentran publicaciones"})
         }
     }catch (e) {
-        
+        console.log(e);
     }
 });
 router.post("/", async (req,res) => {
