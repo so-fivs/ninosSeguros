@@ -30,7 +30,7 @@ router.post("/", async (req,res) => {
         }else {
             const newUser = new User({ name, username, password });
 
-            newUser.save();
+            await newUser.save();
             res.status(200).json(jsonResponse(200, {mensaje: "Usuario creado correctamente"}));
         }
     }catch(error){

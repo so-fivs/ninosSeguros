@@ -1,6 +1,7 @@
 import {useAuth} from "../auth/Authenti";
 import {useState, useEffect} from "react";
 import { API_URL } from "../auth/constants";
+import Portal from "../templates/portal";
 
 interface Todo {
     _id:string,
@@ -73,6 +74,7 @@ export default function Directory() {
     }
 
     return (
+        <Portal>
         <div>
             <h1>Perfil de {auth.getUser()?.username || ""}</h1>
             <form onSubmit={handleSubmit}>
@@ -89,5 +91,6 @@ export default function Directory() {
             ))}
 
         </div>
+        </Portal>
     );
 }

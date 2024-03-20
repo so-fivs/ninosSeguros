@@ -23,7 +23,6 @@ router.post("/", async (req,res) => {
 
         }catch(err){
 
-            console.log("entra mal")
             return res.status(403).json({ error: "No autorizado" });
         }
     }else{
