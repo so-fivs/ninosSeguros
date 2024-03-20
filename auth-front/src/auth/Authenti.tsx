@@ -10,7 +10,7 @@ const AuthContext = createContext({
     isAuthenticated : false,
     getAccessToken: () => {},
     getRefreshToken: () => {},
-    checkAuth: () => {},
+    getUser:() => ({} as User|undefined),
     saveUser: (userData:AuthResponse) => {},
 });
 export default function Authenti({children}:AuthProps) {
@@ -18,11 +18,13 @@ export default function Authenti({children}:AuthProps) {
     const [accessToken, setAccessToken] = useState<string>("");
     const [user, setUser] = useState<User>();
 
-    useEffect(() => {}, []);
+    useEffect(() => {
+        checkAuth();
+    }, []);
 
     async function requestNewAccessToken(refreshToken:string){
         try{
-            const response = await fetch( `${API_URL}/refresh-token`, {
+            const response = await fetch( `${API_URL}/refreshToken`, {
                 method: "POST",
                 //https://dev.to/oneadvanced/different-types-of-security-token-4on#:~:text=Access%20tokens%20are%20used%20in,which%20must%20be%20a%20JWT.
                 headers: {
@@ -46,7 +48,9 @@ export default function Authenti({children}:AuthProps) {
             return null;
         }
     }
-
+    function getUser(){
+        return user;
+    }
     async function getUserInfo( accessToken: string ){
         try{
             const response = await fetch( `${API_URL}/user`, {
@@ -64,7 +68,7 @@ export default function Authenti({children}:AuthProps) {
                 if(json.error){
                     throw new Error(json.error);
                 }
-                return json;
+                return json.body;
             }else{
                 throw new Error(response.statusText);
             }
@@ -102,10 +106,10 @@ export default function Authenti({children}:AuthProps) {
         return accessToken;
     }
     function getRefreshToken():string|null {
-        const token = localStorage.getItem("token");
-        if(token){
-            const { refreshToken } = JSON.parse(token);
-            return refreshToken;
+        const tokenData = localStorage.getItem("token");
+        if(tokenData){
+            const token = JSON.parse(tokenData);
+            return token;
         }else{
             return null;
         }
@@ -117,7 +121,7 @@ export default function Authenti({children}:AuthProps) {
         );
     }
     return(
-        <AuthContext.Provider value = {{isAuthenticated, getAccessToken, getRefreshToken, saveUser, checkAuth}}>
+        <AuthContext.Provider value = {{isAuthenticated, getAccessToken, getRefreshToken, saveUser, getUser}}>
             {children}
         </AuthContext.Provider>
     );
