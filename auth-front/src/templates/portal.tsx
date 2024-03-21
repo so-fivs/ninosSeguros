@@ -1,27 +1,31 @@
-import React from "react";
+import React, { MouseEvent } from "react";
 import {useAuth} from "../auth/Authenti";
 import {Link} from "react-router-dom";
-export default function Portal({children}:{children:React.ReactNode}){
+import { API_URL } from "../auth/constants";
+
+interface PortalTemplate{
+    children?: React.ReactNode;
+}
+export default function Portal({children}:PortalTemplate){
     const auth = useAuth();
 
-    async function handleSignOut(e:React.MouseEvent<HTMLAnchorElement>){
+    async function handleSignOut(e:MouseEvent){
         e.preventDefault();
         
         try{
-            const response = await fetch(`${API_URL}/signout`,{
+            const response = await fetch(`${API_URL}/signout`, {
                 method: "DELETE",
                 headers: {
                     "Content-Type": "application/json",
                     Authorization: `Bearer ${auth.getRefreshToken()}`,
                 },
-
             });
 
             if (response.ok){
                 auth.signOut();
             }
         }catch (e) {
-            
+            console.log(e);
         }
     }
     return (
@@ -33,10 +37,10 @@ export default function Portal({children}:{children:React.ReactNode}){
                         <Link to="/directory">Home</Link>
                     </li>
                     <li>
-                        <Link to="/me">Perfil</Link>
+                        <Link to="/directory">Perfil</Link>
                     </li>
                     <li>
-                        <Link to="/me">{auth.getUser()?.username ?? ""}</Link>
+                        <Link to="/directory">{auth.getUser()?.username ?? ""}</Link>
                     </li>
                     <li>
                         <a href="#" onClick={handleSignOut}>
@@ -47,7 +51,7 @@ export default function Portal({children}:{children:React.ReactNode}){
             </nav>
         </header>
 
-        <main className="dashboard">{children}</main>
+        <main className="directory">{children}</main>
     </>
     );
 }

@@ -4,21 +4,15 @@ import { API_URL } from "../auth/constants";
 import Portal from "../templates/portal";
 
 interface Todo {
-    _id:string,
-    idUser: string,
-    title:string,
+    id: string;
+    title: string;
     completed: boolean;
 }
-
 
 export default function Directory() {
     const auth = useAuth();
     const [title, setTitle] = useState("");
     const [todos, setTodos] = useState<Todo[]>([]);
-
-    useEffect(() => {
-        loadTodos();
-    }, []);
 
     async function handleSubmit(e: React.FormEvent<HTMLFormElement>){
         e.preventDefault();
@@ -26,22 +20,19 @@ export default function Directory() {
     }
 
     async function createTodo(){
-        const accessToken = auth.getAccessToken();
         try{
-            const response = await fetch(`${API_URL}/todos`, {
+            const response = await fetch(`${API_URL}/todos`,  {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    Authorization: `Bearer ${accessToken}`,
+                    Authorization: `Bearer ${auth.getAccessToken()}`,
                 },
                 body: JSON.stringify({title}),
             });
 
             if (response.ok) {
-                const json = await response.json();
-                setTodos([json, ...todos]);
-            }else{
-                //error de conexion
+                const json = (await response.json()) as Todo;
+                setTodos([...todos, json]);
             }
 
         } catch (error) {
@@ -54,6 +45,7 @@ export default function Directory() {
         const accessToken = auth.getAccessToken();
         try{
             const response = await fetch(`${API_URL}/todos`, {
+                method: "GET",
                 headers: {
                     "Content-Type": "application/json",
                     Authorization: `Bearer ${accessToken}`,
@@ -64,8 +56,6 @@ export default function Directory() {
                 const json = await response.json();
                 setTodos(json);
                 console.log(json);
-            }else{
-                //error de conexion
             }
 
         } catch (error) {
@@ -73,23 +63,27 @@ export default function Directory() {
         }
     }
 
+    useEffect(() => {
+        loadTodos();
+    }, []);
+
     return (
         <Portal>
-        <div>
-            <h1>Perfil de {auth.getUser()?.username || ""}</h1>
+        <div className="dashboard">
+            <h1>Perfil de {auth.getUser()?.username ?? ""}</h1>
             <form onSubmit={handleSubmit}>
                 <input type="text"
                        placeholder="Nuevo item..."
-                       onChange={(e) => setTitle(e.target.value)}
                        value={title}
+                       onChange={(e) => setTitle(e.target.value)}
                 />
             </form>
-            {todos.map((todo) => (
-                <div key = {todo._id}>
+            {todos.map((todo: Todo) => (
+                <div key={todo.id}>
                     <h3>{todo.title}</h3>
+                    <p>{todo.completed}</p>
                 </div>
             ))}
-
         </div>
         </Portal>
     );

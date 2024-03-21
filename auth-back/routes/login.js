@@ -9,7 +9,7 @@ router.post("/", async (req,res) => {
     const {username,password} = req.body;
 
     //error si no estan los datos
-    if(!!!username || !!!password){ // si no hay nada en x dato, envio una respuesta
+    if(!username || !password){ // si no hay nada en x dato, envio una respuesta
         return res.status(400).json(
             jsonResponse(400, {
                 error: "Campos requeridos",
@@ -17,43 +17,49 @@ router.post("/", async (req,res) => {
         );
     }
 
-    //autentica usuaraio
-    const user = await User.findOne( {username} );
+    try{//autentica usuaraio
+        let user = new User();
+        const userExists = await user.usernameExist(username);
 
-    if(user){
-        const corretPassword = await user.comparePassword(password, user.password);
+        if (userExists) {
 
-        if(corretPassword){
-            //https://www.izertis.com/es/-/blog/refresh-token-con-autenticacion-jwt-implementacion-en-node-js
-            const accessToken = user.createAccessToken();
-            const refreshToken = await user.createRefreshToken();
+            user = await User.findOne({username});
+
+            const corretPassword = await user.comparePassword(password, user.password);
+
+            if (corretPassword) {
+                    //https://www.izertis.com/es/-/blog/refresh-token-con-autenticacion-jwt-implementacion-en-node-js
+                const accessToken = user.createAccessToken();
+                const refreshToken = await user.createRefreshToken();
 
 
-            res.status(200)
-                .json(jsonResponse(200,{
-                    user: getUserInfo(user),
-                    accessToken,
-                    refreshToken,
-                    mensaje: "Logeado Ok",
+                res.status(200)
+                    .json(jsonResponse(200, {
+                        user: getUserInfo(user),
+                            accessToken,
+                            refreshToken,
+                        })
+                    );
+
+            } else {
+                    //si se especifica, el atacante sabria mas facil cual campo tiene que buscar
+                return res.status(400).json(
+                    jsonResponse(400, {
+                        error: "El usuario o la contrasena no es correcta",
                     })
                 );
-
-        }else{
-            //si se especifica, el atacante sabria mas facil cual campo tiene que buscar
+            }
+        } else {
             return res.status(400).json(
                 jsonResponse(400, {
                     error: "El usuario o la contrasena no es correcta",
                 })
             );
         }
-    }else{
-        return res.status(400).json(
-            jsonResponse(400, {
-                error: "El usuario o la contrasena no es correcta",
-            })
-        );
-    }
 
+    }catch (e) {
+        console.log(e);
+    }
 });
 
 module.exports = router;

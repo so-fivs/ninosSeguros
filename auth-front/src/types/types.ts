@@ -13,11 +13,9 @@ export interface AuthResponseError {
 }
 
 export interface User {
-    body: {
-        _id: string,
-        name: string,
-        username: string,
-    };
+        _id: string;
+        name: string;
+        username: string;
 }
 
 export interface AccessTokenResponse{

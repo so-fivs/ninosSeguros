@@ -1,5 +1,5 @@
 import Default from "../templates/default";
-import { Navigate, useNavigate } from "react-router-dom";
+import { Navigate} from "react-router-dom";
 import { useAuth } from "../auth/Authenti";
 import { useState } from "react";
 import { API_URL } from "../auth/constants";
@@ -8,9 +8,9 @@ import { AuthResponseError, AuthResponse } from "../types/types";
 export default function Login() {
 
     const [username, setUsername] = useState("");
-    const [password, setPassword] = useState("");  const [errorResponse, setErrorResponse] = useState("");
+    const [password, setPassword] = useState("");
+    const [errorResponse, setErrorResponse] = useState("");
     const auth = useAuth();
-    const goTo = useNavigate();
 
     async function handleSubmit( e : React.FormEvent<HTMLFormElement> ){
         e.preventDefault();
@@ -35,14 +35,12 @@ export default function Login() {
 
                 if (json.body.accessToken && json.body.refreshToken){
                     auth.saveUser(json);
-                    goTo("/directory")
                 }
 
             }else{
                 console.log("Algo ocurrio");
                 const json = (await response.json()) as AuthResponseError;
                 setErrorResponse(json.body.error);
-                return;
             }
 
         }catch (error) {
