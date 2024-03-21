@@ -8,7 +8,7 @@ router.post("/", async (req,res) => {
     const {name,username,password} = req.body;
 
     //error si no estan los datos
-    if(!!!name || !!!username || !!!password){ // si no hay nada en x dato, envio una respuesta
+    if(!name || !username || !password){ // si no hay nada en x dato, envio una respuesta
         return res.status(400).json(
             jsonResponse(400, {
                 error: "Campos requeridos",

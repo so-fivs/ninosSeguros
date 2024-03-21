@@ -1,9 +1,8 @@
 const router = require("express").Router();
-const jsonResponse = require("../lib/jsonResponse");
+const {jsonResponse} = require("../lib/jsonResponse");
 
 router.get("/", (req,res) => {
-    const reqUser = req.user;
-    res.status(200).json({reqUser});
+    res.json(jsonResponse(200, req.user));
 });
 
 module.exports = router;

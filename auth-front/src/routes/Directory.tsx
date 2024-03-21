@@ -79,7 +79,7 @@ export default function Directory() {
                 />
             </form>
             {todos.map((todo: Todo) => (
-                <div key={todo.id}>
+                <div key={todo._id}>
                     <h3>{todo.title}</h3>
                     <p>{todo.completed}</p>
                 </div>
