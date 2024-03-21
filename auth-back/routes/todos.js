@@ -1,7 +1,9 @@
 const router = require("express").Router();
 const Todo = require("../shema/todo");
 
+//se toma de ejemplo un block de notas = se puede tomar como los post
 router.get("/", async (req,res) => {
+    //recupera las notas guardadas en la bd
     try{
         const todos = await Todo.find({idUser: req.user.id})
         if (todos){
@@ -13,7 +15,7 @@ router.get("/", async (req,res) => {
         console.log(e);
     }
 });
-router.post("/", async (req,res) => {
+router.post("/", async (req,res) => {//guarda la nota en la bd
     if (!req.body.title){
         return res.status(200).json({error : "Se necesita titulo"})
     }

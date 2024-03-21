@@ -19,7 +19,7 @@ router.post("/", async (req,res) => {
     //crear el usuario
     try {
         const user = new User();
-        const exist = await user.usernameExist(username);
+        const exist = await user.usernameExist(username); //valida si ya existia un usuario
 
         if (exist) {
             return res.status(400).json(
@@ -28,8 +28,8 @@ router.post("/", async (req,res) => {
                 })
             );
         }else {
+            //guarda el usuario en la bd
             const newUser = new User({ name, username, password });
-
             await newUser.save();
             res.status(200).json(jsonResponse(200, {mensaje: "Usuario creado correctamente"}));
         }

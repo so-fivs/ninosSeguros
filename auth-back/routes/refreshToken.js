@@ -7,15 +7,18 @@ const Token = require("../shema/token");
 const getUserInfo = require("../lib/getUserInfo");
 
 router.post("/", async (req,res) => {
+    //recuperamos el refresh
     const refreshToken = req.body.refreshToken;
-    if (refreshToken){
+    if (refreshToken){//si existe entonces
         try{
-            const found = await Token.findOne({ token:refreshToken });
+            const found = await Token.findOne({ token:refreshToken }); //guarda la info del token que está en la bd
             if (!found){
                 return res.status(403).json({ error: "No es valido el token" });
             }
+            //recupera el token # de la bd
             const payload = validateRefreshTokens(found.token);
             if (payload){
+                //genera un nuevo access token a partir del usuario
                 const accessToken = generateAccessToken(getUserInfo(payload.user));
                 return res.json(jsonResponse(200, { accessToken }));
             }else{

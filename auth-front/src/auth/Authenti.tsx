@@ -7,16 +7,17 @@ interface  AuthProps{
     children: React.ReactNode;
 }
 
-const AuthContext = createContext({
-    isAuthenticated : false,
-    getAccessToken: () => {},
-    getRefreshToken: () => {},
-    setTokens: (_accessToken: string,_refreshToken: string) => {},
-    getUser:() => ({} as User|undefined),
-    saveUser: (_userData:AuthResponse) => {},
-    signOut:() => {},
+const AuthContext = createContext({//permite que otros componentes accedan
+    isAuthenticated : false,//booleano
+    getAccessToken: () => {},//funcion qque devuelve el token de acceso
+    getRefreshToken: () => {},//funcion que devuelve el token de refresco
+    setTokens: (_accessToken: string,_refreshToken: string) => {}, //cmodifica los tokens
+    getUser:() => ({} as User|undefined), //devuelve el usuario, pude ser como usuario o indefinido
+    saveUser: (_userData:AuthResponse) => {}, //guarda el usuario en la bd
+    signOut:() => {}, //termina la sesion
 });
 export default function Authenti({children}:AuthProps) {
+    //se inicializan varios estados
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [accessToken, setAccessToken] = useState<string>("");
     const [refreshToken, setRefreshToken] = useState<string>("");
@@ -25,7 +26,7 @@ export default function Authenti({children}:AuthProps) {
 
 
 
-    async function requestNewAccessToken(refreshToken:string){
+    async function requestNewAccessToken(refreshToken:string){//pide nuevo token
         //se pone el request token en otro componente, para ordenar
         const token = await getNewAToken(refreshToken);
         if (token) {
@@ -77,7 +78,8 @@ export default function Authenti({children}:AuthProps) {
 
             } else {
                 //si no existe access token
-                const token = localStorage.getItem("token");
+                const token = localStorage.getItem("token");//se guarda en al memoria
+                //se crea un nuevo access token
                 if (token) {
                     const refreshToken = JSON.parse(token).refreshToken;
                     if (refreshToken){
@@ -96,7 +98,7 @@ export default function Authenti({children}:AuthProps) {
                 }
 
             }
-            setIsLoading(false);
+            setIsLoading(false); //esto es la "pantalla de carga"
         }catch (err){
            console.log(err);
            setIsLoading(false);
@@ -104,6 +106,7 @@ export default function Authenti({children}:AuthProps) {
     }
 
     function setTokens(accessToken:string,refreshToken:string){
+        //modifica y guarda los tokens
         setAccessToken(accessToken);
         setRefreshToken(refreshToken);
 
@@ -112,7 +115,7 @@ export default function Authenti({children}:AuthProps) {
     function getAccessToken() {
         return accessToken;
     }
-    function getRefreshToken(){
+    function getRefreshToken(){//recupera el token de la memoria
         if(!!refreshToken){
             return refreshToken;
         }
@@ -138,7 +141,7 @@ export default function Authenti({children}:AuthProps) {
         setUser(undefined);
         setIsAuthenticated(false);
     }
-    useEffect(() => {
+    useEffect(() => { //esto se hace despues que se carga el html
         checkAuth();
     }, []);
     return(
