@@ -88,7 +88,7 @@ export default function Authenti({children}:AuthProps) {
                             const userInfo = await getUserInfo(newAccessToken!);
                             if (userInfo) {
                                 setUser(userInfo);
-                                setAccessToken(accessToken);
+                                setAccessToken(newAccessToken);
                                 setIsAuthenticated(true);
                                 setIsLoading(false);
                                 return;
