@@ -37,7 +37,7 @@ export default function Portal({children}:PortalTemplate){
                         <Link to="/directory">Home</Link>
                     </li>
                     <li>
-                        <Link to="/directory">Perfil</Link>
+                        <Link to="/perfil">Perfil</Link>
                     </li>
                     <li>
                         <Link to="/directory">{auth.getUser()?.username ?? ""}</Link>

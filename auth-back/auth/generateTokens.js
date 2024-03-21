@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken")
-/
+//
 function sign(payload, isAccessToken){
     return jwt.sign(payload, //usuario
                     isAccessToken  //valida si es un token de acceso o uno de refresco

@@ -4,6 +4,7 @@ import './index.css'
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Login from './routes/Login.tsx'
 import Signup from './routes/signup.tsx'
+import Perfil from './routes/perfil.tsx'
 import Directory from './routes/Directory.tsx'
 import Protect from './routes/Protect.tsx'
 import Authenti from './auth/Authenti.tsx'
@@ -29,7 +30,11 @@ const router = createBrowserRouter([
             {
                 path: "/directory",
                 element: < Directory />,
-            }
+            },
+            {
+                path: "/perfil",
+                element: < Perfil />,
+            },
         ]
     },
 ]);

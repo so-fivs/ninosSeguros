@@ -14,7 +14,7 @@ const UserSchema = new Mongoose.Schema({
 UserSchema.pre("save", function(next){
     if (this.isModified("password") || this.isNew) {
         const document = this;
-//https://www.izertis.com/es/-/blog/encriptacion-de-password-en-nodejs-y-mongodb-bcrypt#:~:text=Lleva%20incorporado%20un%20valor%20llamado,en%20la%20base%20de%20datos.
+//https://www.izertis.com/es/-/blog/encriptacion-de-password-en-nodejs-y-mongodb-bcrypt
         bcrypt.hash(document.password,10, (err,hash) =>{
             if(err){
                 next(err);
@@ -38,7 +38,6 @@ UserSchema.methods.comparePassword = async function(password, hash){
     const same = await bcrypt.compare(password,hash);
     return same;
 };
-
 UserSchema.methods.createAccessToken = function(){
     return generateAccessToken(getUserInfo(this));
 };
